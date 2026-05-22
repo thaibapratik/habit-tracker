@@ -34,6 +34,7 @@
     "node_modules",
     "get-db-data.ts",
     "get-data.ts",
-    "test-*.ts"
+    "test-*.ts",
+    "prisma/seed.ts"
   ]
 }
