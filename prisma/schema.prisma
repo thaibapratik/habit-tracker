@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model DailyLog {
+  id              String   @id @default(cuid())
+  date            DateTime @unique
+  dmsSent         Int      @default(0)
+  repliesReceived Int      @default(0)
+  callsBooked     Int      @default(0)
+  auditsSold      Int      @default(0)
+  retainersSigned Int      @default(0)
+  routineCompleted Json    // {dms: true, post: true, engage: true, followups: true, clientWork: false}
+  notes           String?
+  createdAt       DateTime @default(now())
+}
+
+model Revenue {
+  id          String   @id @default(cuid())
+  amount      Float
+  source      String   // "audit" | "retainer" | "fullOS"
+  clientName  String
+  receivedAt  DateTime
+  isRecurring Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Client {
+  id            String   @id @default(cuid())
+  notionId      String?  @unique
+  name          String
+  niche         String
+  priority      String   @default("Low") // "Low", "Medium", or "High"
+  status        String   // "prospect" | "replied" | "call_booked" | "audit_sold" | "retainer" | "lost"
+  dmSentAt      DateTime?
+  signedAt      DateTime?
+  monthlyValue  Float?
+  notes         String?
+  dynamicProps  Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  milestone   String   // "$100" | "$1000" | "$10000"
+  targetAmount Float
+  achievedAt  DateTime?
+  isActive    Boolean  @default(true)
+}
+
+model RoadmapPhase {
+  id          String   @id @default(cuid())
+  name        String
+  startDay    Int
+  endDay      Int
+  focus       String
+  description String?
+}
